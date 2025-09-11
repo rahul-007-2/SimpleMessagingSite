@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Messaging App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.3s ease;
+    }
+    .chat-container {
+      height: 100%;
+      width: 75%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .chat-window {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      border-bottom: 1px solid #ccc;
+      flex-direction: row;
+    }
+    .message-sent {
+      background: #e1ffc7;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 6px;
+      max-width: 100%;
+      margin-left: 40%;
+    }
+    .message-received {
+      background: #f1f0f0;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 6px;
+      max-width: 60%;
+    }
+    .message-sent-time {
+      font-size: 7;
+      text-align: right;
+    }
+    .message-sent-time2 {
+      font-size: 7;
+      text-align: left;
+    }
+    .message-sent-space {
+      max-width: 0%;
+    }
+    .input-area {
+      display: flex;
+      padding: 10px;
+      
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+    .input-area button {
+      margin-left: 8px;
+      padding: 10px 15px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .input-area button:hover {
+      background: #0056b3;
+    }
+    .theme-selector {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      margin: 10px;
+      align-self: flex-end;
+      cursor: pointer;
+
+    }
+
+    body.light .message-sent-time{
+      color: #1d1d1d;
+    }
+    body.light .message-sent-time2{
+      color: #1d1d1d;
+    }
+    body.light .theme-selector{
+      background: #eaeaea;
+      color: #000000;
+    }
+    body.light {
+      background: #f4f4f4;
+    }
+    body.light .chat-container {
+      background: #fff;
+      color: #000;
+    }
+    body.light .message {
+      background: #e1ffc7;
+    }
+    body.light .message-sent-time{
+      background: #fff;
+    }
+    body.light .input-area{
+      background: #fafafa;
+    }
+
+
+    body.dark .message-sent-time{
+      color: #ffffff;
+    }
+    body.dark .message-sent-time2{
+      color: #ffffff;
+    }
+    body.dark .theme-selector{
+      background: #626262;
+      color: #ffffff;
+    }
+    body.dark .input-area{
+      background: #404040;
+    }
+    body.dark {
+      background: #121212;
+    }
+    body.dark .chat-container {
+      background: #1e1e1e;
+      color: #fff;
+    }
+    body.dark .chat-window {
+      border-bottom: 1px solid #444;
+    }
+    body.dark .message {
+      background: #333;
+      color: #fff;
+    }
+    body.dark .input-area input {
+      background: #2a2a2a;
+      color: #fff;
+      border: 1px solid #555;
+    }
+    body.dark .message-sent-space{
+      background: #1e1e1e;
+    }
+    body.dark .message-sent{
+      color:#000000;
+    }
+    body.dark .message-received {
+      color:#000000;
+    }
+  </style>
+</head>
+<body class="light">
+
+  <div class="chat-container">
+    <select id="themeSelector" class="theme-selector">
+      <option value="light">☀️ Light Mode</option>
+      <option value="dark">🌙 Dark Mode</option>
+    </select>
+    <div class="chat-window" id="chatWindow">
+    </div>
+    <div class="input-area">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <button id="sendBtn">Send</button>
+      <button id="clearBtn" class="clear-btn">Clear</button>
+    </div>
+  </div>
+
+  <script>
+    const sentWindow = document.getElementById('sent');
+    const receivedWindow = document.getElementById('received');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const themeSelector = document.getElementById('themeSelector');
+
+    function sendMessage() {
+      const messageText = messageInput.value.trim();
+      if (messageText !== "") {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message-sent');
+        messageElement.textContent = messageText;
+        chatWindow.appendChild(messageElement);
+
+        let now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const time = document.createElement('div');
+        time.classList.add('message-sent-time');
+        time.textContent = hour + ":" + (minute < 10 ? '0' + minute : minute);
+        chatWindow.appendChild(time);
+
+        const messageElement2 = document.createElement('div');
+        messageElement2.classList.add('message-received');
+        messageElement2.textContent = "Recieved your message: '" + messageText + "'";
+        chatWindow.appendChild(messageElement2);
+
+        let now2 = new Date();
+        const hour2 = now2.getHours();
+        const minute2 = now2.getMinutes();
+        const time2 = document.createElement('div');
+        time2.classList.add('message-sent-time2');
+        time2.textContent = hour2 + ":" + (minute2 < 10 ? '0' + minute2 : minute2);
+        chatWindow.appendChild(time2);
+
+        const space = document.createElement('div');
+        space.classList.add('message-sent-space')
+        chatWindow.appendChild(space);
+
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        messageInput.value = "";
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    messageInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    clearBtn.addEventListener('click', function() {
+      chatWindow.innerHTML = "";
+    });
+
+    themeSelector.addEventListener('change', function() {
+      document.body.className = this.value;
+    });
+  </script>
+
+</body>
+</html>
